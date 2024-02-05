@@ -104,6 +104,7 @@ def test(file,model,model_bert,tokenizer,device,start,end):
 	a=pd.read_csv(file, delimiter='\t',header=None)
 	for i in tqdm(range(start,end)):
 		with torch.no_grad():
+			#选取数据
 			index=a.iloc[i,0]
 			history=a.iloc[i,3]
 			if not isinstance(history,str):
@@ -114,6 +115,8 @@ def test(file,model,model_bert,tokenizer,device,start,end):
 			sort_all=[]
 			prompt_user=[]
 			prompt_target=[]
+
+			#获取user的编码信息
 			for j in range(len(history)):
 				prompt_user.append(reflect_news_to_str(history[j]))
 			user_tokens=tokenizer(prompt_user, return_tensors="pt", padding=True)
@@ -121,15 +124,17 @@ def test(file,model,model_bert,tokenizer,device,start,end):
 			attention_mask=user_tokens['attention_mask'].to(device)
 			logits_user=model(input_ids,attention_mask=attention_mask)
 
-			for k in range(len(target)):
-				prompt_target.append(reflect_news_to_str(target[k]))
+			#获取样本的编码信息
+			for j in range(len(target)):
+				prompt_target.append(reflect_news_to_str(target[j]))
 			target_tokens = tokenizer(prompt_target, return_tensors="pt", padding=True)
 			a_for=target_tokens['input_ids'].to(device)
 			b_for=target_tokens['attention_mask'].to(device)
 			logits=model_bert(input_ids=a_for,attention_mask=b_for)[0][:, 0, :]
 
-			for k in range(len(target)):
-				loss_predict_1 = torch.dot(logits[k],logits_user)
+			#和user的编码信息点乘，计算结果
+			for j in range(len(target)):
+				loss_predict_1 = torch.dot(logits[j],logits_user)
 				sort_all.append(loss_predict_1.item())
 			prediction = np.array(sort_all)
 			result_sort = np.argsort(-prediction)
@@ -141,6 +146,3 @@ def test(file,model,model_bert,tokenizer,device,start,end):
 	filename=f"result_{start}_{end}.txt"
 	with open(filename, 'w') as f:
 		f.writelines(result)
-
-
-
