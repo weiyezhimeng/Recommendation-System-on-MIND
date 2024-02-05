@@ -21,6 +21,7 @@ news = pd.read_csv("../MIND/MINDlarge_test/news.tsv", delimiter='\s*\t\s*',heade
 ```
 ## Others - 其他
 `bert-news.pth和user.pth是已训练完成的模型`
+`GPU.py可用来观察GPU显存使用情况`
 
 ## License - 开源协议
 [MIT](https://choosealicense.com/licenses/mit/)
