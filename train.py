@@ -3,7 +3,6 @@ from utils import loss
 import gc
 from GPU import GPU
 def train(tokenizer,model,model_bert,device,lr,EPOCH,loader,batch):
-    # ========== setup optim_embeds ========== #
     for epoch in range(EPOCH):
         step = 0
         print('Epoch:', epoch + 1, 'Training...')
