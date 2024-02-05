@@ -95,7 +95,7 @@ def loss(history,label,batch,model,model_bert,tokenizer,device):
 			temp=score_1[j].unsqueeze(0)
 			temp_for_loss=torch.cat((temp,score_0),dim=0)
 			loss_all-=torch.log(F.softmax(temp_for_loss-torch.max(temp_for_loss),dim=0)[0])
-			print(F.softmax(temp_for_loss-torch.max(temp_for_loss),dim=0))
+			#print(F.softmax(temp_for_loss-torch.max(temp_for_loss),dim=0))
 		num+=len(label_1[i])
 	return loss_all/num
 
